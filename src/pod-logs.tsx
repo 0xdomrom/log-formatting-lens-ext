@@ -52,9 +52,9 @@ export class PodLogs {
         <Icon
           material="subject"
           interactive={props.toolbar}
-          tooltip="Logs w/Bunyan"
+          tooltip="Formatted logs"
         />
-        <span className="title">Logs w/Bunyan</span>
+        <span className="title">Formatted logs</span>
         {
           containerNames.size >= 1 && (
             <>
@@ -92,12 +92,12 @@ export class PodLogs {
     resourceTitle: string,
     containerName?: string
   ) {
-    // Generate log command with bunyan
-    const cmd = `kubectl logs -f -n ${resourceNs} ${resourceName} -c ${containerName} --tail=300 | bunyan -o short`
+    // Generate log command with jq
+    const cmd = `kubectl logs -f -n ${resourceNs} ${resourceName} -c ${containerName} --tail=300 | jq -r '"\\(.["syslog.timestamp"]) \\(.["syslog.severity"] | if . == "INFO" then "\\u001b[32m\\(.)\\u001b[0m" else "\\u001b[31m\\(.)\\u001b[0m" end)\\t\\(.["logger.name"])\\t\\(.["logger.method_name"])\\t\\(.message)"'`
 
     // Open new terminal
     this.openTerminal(
-      `${resourceTitle}: ${resourceName}:${containerName} | bunyan`,
+      `${resourceTitle}: ${resourceName}:${containerName} | Formatted logs`,
       cmd
     )
   }
