@@ -8,7 +8,7 @@ import { Renderer } from "@k8slens/extensions"
  * 
  * See more details: <https://docs.k8slens.dev/>
  */
-export default class BunyanExtensionMain extends Renderer.LensExtension {
+export default class LogFormattingExtensionMain extends Renderer.LensExtension {
   /**
    * onActivate is called when your extension has been successfully enabled.
    */
