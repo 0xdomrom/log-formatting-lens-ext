@@ -1,6 +1,6 @@
 {
 	"name": "@0xdomrom/log-formatting-lens-ext",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "A log formatted for Lens",
 	"publisher": "@0xdomrom/log-formatting-lens-ext",
 	"main": "dist/main.js",

@@ -1,6 +1,8 @@
 import { Renderer } from "@k8slens/extensions"
 import React from "react"
 import { PodLogsMenuItem } from "./src/pod-logs-menu"
+import {preferenceStore} from "./src/settings/preference-store";
+import { PreferenceHint, SettingsPage} from "./src/settings/settings-page";
 
 type Pod = Renderer.K8sApi.Pod
 
@@ -21,12 +23,36 @@ export default class OciImageExtensionRenderer extends Renderer.LensExtension {
    * onActivate is called when your extension has been successfully enabled.
    */
   onActivate() {
-    console.log("activated")
+    console.log("lens-multi-pod-logs renderer | activating...");
+    preferenceStore.loadExtension(this);
+    console.log("lens-multi-pod-logs renderer | activated");
   }
+
+
+  // Array of objects for extension preferences
+  appPreferences = [
+    {
+      title: "",
+      components: {
+        Input: () => <SettingsPage />,
+        Hint: () => <PreferenceHint />,
+      },
+    },
+  ];
+
 
   kubeObjectMenuItems = [
     {
       kind: "Pod",
+      apiVersions: ["v1"],
+      components: {
+        MenuItem: (props: Renderer.Component.KubeObjectMenuProps<Renderer.K8sApi.Pod>) => (
+          <PodLogsMenuItem {...props} />
+        ),
+      },
+    },
+    {
+      kind: "Jobs",
       apiVersions: ["v1"],
       components: {
         MenuItem: (props: Renderer.Component.KubeObjectMenuProps<Renderer.K8sApi.Pod>) => (
